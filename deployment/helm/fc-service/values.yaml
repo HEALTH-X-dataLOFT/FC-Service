@@ -185,7 +185,7 @@ keycloak:
     adminPassword: admin
   extraEnvVars:
     - name: KEYCLOAK_EXTRA_ARGS
-      value: "-Dkeycloak.import=/config/gaia-x-realm.json"
+      value: "--import-realm"
     - name: PROXY_ADDRESS_FORWARDING
       value: "true"
     - name: KEYCLOAK_FRONTEND_URL
@@ -194,7 +194,7 @@ keycloak:
       value: "http://key-server/admin/"
   extraVolumeMounts:
     - name: config
-      mountPath: "/config"
+      mountPath: "/opt/bitnami/keycloak/data/import"
       readOnly: true
   extraVolumes:
     - name: config
