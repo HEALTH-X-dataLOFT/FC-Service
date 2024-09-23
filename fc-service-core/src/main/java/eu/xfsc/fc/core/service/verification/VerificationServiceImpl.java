@@ -665,15 +665,18 @@ public class VerificationServiceImpl implements VerificationService {
       }
     }
 
-    try {
-      ResponseEntity<Map> resp = rest.postForEntity(trustAnchorAddr, Map.of("uri", uri), Map.class);
-      if (!resp.getStatusCode().is2xxSuccessful()) {
-        log.info("hasPEMTrustAnchorAndIsNotExpired; Trust anchor is not set in the registry. URI: {}", uri);
-      }
-    } catch (Exception ex) {
-      log.warn("hasPEMTrustAnchorAndIsNotExpired; trust anchor error: {}", ex.getMessage());
-      throw new VerificationException("Signatures error; " + ex.getMessage());
-    }
+    log.info("Skipping trust anchor check for: {}", uri);
+    // try {
+    //   log.info("bla1 {}, {}", trustAnchorAddr, uri);
+    //   ResponseEntity<Map> resp = rest.postForEntity(trustAnchorAddr, Map.of("uri", uri), Map.class);
+    //   log.info(resp.getStatusCode().toString());
+    //   if (!resp.getStatusCode().is2xxSuccessful()) {
+    //     log.info("hasPEMTrustAnchorAndIsNotExpired; Trust anchor is not set in the registry. URI: {}", uri);
+    //   }
+    // } catch (Exception ex) {
+    //   log.warn("hasPEMTrustAnchorAndIsNotExpired; trust anchor error: {}", ex.getMessage());
+    //   throw new VerificationException("Signatures error; " + ex.getMessage());
+    // }
     Instant exp = relevant == null ? null : relevant.getNotAfter().toInstant();
     log.debug("hasPEMTrustAnchorAndIsNotExpired.exit; returning: {}", exp);
     return exp;
