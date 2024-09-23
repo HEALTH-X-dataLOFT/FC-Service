@@ -49,7 +49,10 @@ public class SecurityConfig {
 
     http
       //.csrf().disable()
-      .authorizeHttpRequests(authorization -> authorization
+          .csrf(csrf -> csrf
+                  .ignoringRequestMatchers(antMatcher(HttpMethod.POST, "/query"))
+          )
+          .authorizeHttpRequests(authorization -> authorization
           .requestMatchers(antMatcher(HttpMethod.OPTIONS, "/**")).permitAll()
           .requestMatchers(antMatcher(HttpMethod.GET, "/api/**")).permitAll()
           .requestMatchers(antMatcher(HttpMethod.GET, "/swagger-ui/**")).permitAll()
@@ -62,8 +65,8 @@ public class SecurityConfig {
           .requestMatchers(antMatcher(HttpMethod.POST, "/schemas")).hasRole(CATALOGUE_ADMIN_ROLE)
           .requestMatchers(antMatcher(HttpMethod.DELETE, "/schemas/**")).hasRole(CATALOGUE_ADMIN_ROLE)
           .requestMatchers(antMatcher(HttpMethod.PUT, "/schemas")).hasRole(CATALOGUE_ADMIN_ROLE)
-          .requestMatchers(antMatcher(HttpMethod.GET, "/schemas")).authenticated() 
-          .requestMatchers(antMatcher(HttpMethod.GET, "/schemas/**")).authenticated() 
+          .requestMatchers(antMatcher(HttpMethod.GET, "/schemas")).authenticated()
+          .requestMatchers(antMatcher(HttpMethod.GET, "/schemas/**")).authenticated()
 
           // Query APIs
           .requestMatchers(antMatcher("/query")).permitAll()
@@ -71,10 +74,10 @@ public class SecurityConfig {
 
           // Verification APIs
           .requestMatchers(antMatcher("/verification")).permitAll()
-          
+
           // Self-Description APIs
-          .requestMatchers(antMatcher(HttpMethod.GET, "/self-descriptions")).authenticated()
-          .requestMatchers(antMatcher(HttpMethod.GET, "/self-descriptions/{self_description_hash}")).authenticated()
+          .requestMatchers(antMatcher(HttpMethod.GET, "/self-descriptions")).permitAll()
+          .requestMatchers(antMatcher(HttpMethod.GET, "/self-descriptions/{self_description_hash}")).permitAll()
           .requestMatchers(antMatcher(HttpMethod.POST, "/self-descriptions"))
           		.hasAnyRole(CATALOGUE_ADMIN_ROLE, SD_ADMIN_ROLE, PARTICIPANT_ADMIN_ROLE)
           .requestMatchers(antMatcher(HttpMethod.DELETE, "/self-descriptions/{self_description_hash}"))
@@ -84,7 +87,7 @@ public class SecurityConfig {
 
           // Participants API
           .requestMatchers(antMatcher(HttpMethod.POST, "/participants")).hasRole(CATALOGUE_ADMIN_ROLE)
-          .requestMatchers(antMatcher(HttpMethod.GET, "/participants")).hasAnyRole(CATALOGUE_ADMIN_ROLE)
+          .requestMatchers(antMatcher(HttpMethod.GET, "/participants")).permitAll()
           .requestMatchers(antMatcher(HttpMethod.PUT, "/participants/*")).hasAnyRole(CATALOGUE_ADMIN_ROLE, PARTICIPANT_ADMIN_ROLE)
           .requestMatchers(antMatcher(HttpMethod.DELETE, "/participants/*")).hasAnyRole(CATALOGUE_ADMIN_ROLE, PARTICIPANT_ADMIN_ROLE)
           .requestMatchers(antMatcher(HttpMethod.GET, "/participants/*"))
@@ -103,7 +106,7 @@ public class SecurityConfig {
 
           // Session APIs
           .requestMatchers(antMatcher("/session")).authenticated()
-          
+
           .anyRequest().authenticated()
         )
         .exceptionHandling(c -> c.accessDeniedHandler(accessDeniedHandler()))
