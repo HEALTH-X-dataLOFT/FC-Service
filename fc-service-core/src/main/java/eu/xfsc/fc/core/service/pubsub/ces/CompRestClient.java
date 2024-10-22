@@ -24,9 +24,9 @@ public class CompRestClient extends ServiceClient {
 	public Map<String, Object> postCredentials(String selfDescription) {
 		log.debug("postCredentials.enter; got SD: {}", selfDescription.length());
 		// can add optional vcid query param..
-		Map<String, Object> params = Map.of();
-		String str = this.doPost("/credential-offers", selfDescription, params, String.class);
-		Map<String, Object> result;
+        Map<String, Object> queryParams = Map.of();
+        String str = this.doPost("/credential-offers", selfDescription, Map.of(), queryParams, String.class);
+        Map<String, Object> result;
 		try {
 			result = jsonMapper.readValue(str, mapTypeRef);
 			log.debug("postCredentials.exit; returning creds: {}", result.size());

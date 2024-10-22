@@ -16,30 +16,32 @@ public class SchemaClient extends ServiceClient {
     public SchemaClient(String baseUrl, WebClient client) {
         super(baseUrl, client);
     }
-    
+
     public List<OntologySchema> getSchemas(int offset, int limit) {
-        Map<String, Object> params = buildPagingParams(offset, limit);
-        return doGet(baseUrl + "/schemas?offset={offset}&limit={limit}", params, List.class);
+        Map<String, Object> queryParams = buildPagingParams(offset, limit);
+        return doGet("/schemas", Map.of(), queryParams, List.class);
     }
-    
+
     public void addSchema(OntologySchema schema) {
-        doPost(baseUrl + "/schemas", schema, Map.of(), Void.class);
+        doPost("/schemas", schema, Map.of(), Map.of(), Void.class);
     }
 
     public OntologySchema getSchema(String schemaId) {
-        return doGet(baseUrl + "/schemas/{schemaId}", Map.of("schemaId", schemaId), OntologySchema.class);
+        Map<String, Object> pathParams = Map.of("schemaId", schemaId);
+        return doGet("/schemas/{schemaId}", pathParams, Map.of(), OntologySchema.class);
     }
 
     public void deleteSchema(String schemaId) {
-        doDelete(baseUrl + "/schemas/{schemaId}", Map.of("schemaId", schemaId), Void.class);
+        Map<String, Object> pathParams = Map.of("schemaId", schemaId);
+        doDelete("/schemas/{schemaId}", pathParams, Map.of(), Void.class);
     }
 
     public List<OntologySchema> getLatestSchemas() {
-        return doGet(baseUrl + "/schemas/latest", Map.of(), List.class);
+        return doGet("/schemas/latest", Map.of(), Map.of(), List.class);
     }
-    
+
     public OntologySchema getLatestSchemaOfType(String type) {
-        return doGet(baseUrl + "/schemas/latest/{type}", Map.of("type", type), OntologySchema.class);
+        Map<String, Object> pathParams = Map.of("type", type);
+        return doGet("/schemas/latest/{type}", pathParams, Map.of(), OntologySchema.class);
     }
-    
 }

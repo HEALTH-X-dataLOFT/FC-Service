@@ -15,9 +15,8 @@ public class VerificationClient extends ServiceClient {
     public VerificationClient(String baseUrl, WebClient client) {
         super(baseUrl, client);
     }
-    
-    public VerificationResult verify(String selfDescription) {
-        return doPost(baseUrl + "/verification", selfDescription, Map.of(), VerificationResult.class);
-    }
 
+    public VerificationResult verify(String selfDescription) {
+        return doPost("/verification", selfDescription, Map.of(), Map.of(), VerificationResult.class);
+    }
 }

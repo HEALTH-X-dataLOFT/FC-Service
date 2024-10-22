@@ -14,10 +14,9 @@ public class RoleClient extends ServiceClient {
     public RoleClient(String baseUrl, WebClient client) {
         super(baseUrl, client);
     }
-    
+
     public List<String> getAllRoles(int offset, int limit) {
-        Map<String, Object> params = buildPagingParams(offset, limit);
-        return doGet(baseUrl + "/roles?offset={offset}&limit={limit}", params, List.class);
+        Map<String, Object> queryParams = buildPagingParams(offset, limit);
+        return doGet("/roles", Map.of(), queryParams, List.class);
     }
-    
 }

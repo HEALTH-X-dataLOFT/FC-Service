@@ -15,13 +15,12 @@ public class SessionClient extends ServiceClient {
     public SessionClient(String baseUrl, WebClient client) {
         super(baseUrl, client);
     }
-    
+
     public Session getCurrentSession() {
-        return doGet(baseUrl + "/session", Map.of(), Session.class);
+        return doGet("/session", Map.of(), Map.of(), Session.class);
     }
 
     public void deleteCurrentSession() {
-        doDelete(baseUrl + "/session", Map.of(), Void.class);
+        doDelete("/session", Map.of(), Map.of(), Void.class);
     }
-
 }
