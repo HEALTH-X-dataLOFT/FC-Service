@@ -19,58 +19,65 @@ public class ParticipantClient extends ServiceClient {
     public ParticipantClient(String baseUrl, WebClient client) {
         super(baseUrl, client);
     }
-    
+
     public Participant getParticipant(String participantId) {
-        return doGet(baseUrl + "/participants/{participantId}", Map.of("participantId", participantId), Participant.class);
+        Map<String, Object> pathParams = Map.of("participantId", participantId);
+        return doGet("/participants/{participantId}", pathParams, Map.of(), Participant.class);
     }
-    
+
     public Participant getParticipant(String participantId, OAuth2AuthorizedClient authorizedClient) {
-        return doGet(baseUrl + "/participants/{participantId}", Map.of("participantId", participantId), Participant.class, authorizedClient);
+        Map<String, Object> pathParams = Map.of("participantId", participantId);
+        return doGet("/participants/{participantId}", pathParams, Map.of(), Participant.class, authorizedClient);
     }
-    
+
     public List<UserProfile> getParticipantUsers(String participantId) {
+        Map<String, Object> pathParams = Map.of("participantId", participantId);
         Class<List<UserProfile>> reType = (Class<List<UserProfile>>)(Class<?>) List.class;
-        return doGet(baseUrl + "/participants/{participantId}/users", Map.of("participantId", participantId), reType);
+        return doGet("/participants/{participantId}/users", pathParams, Map.of(), reType);
     }
-    
+
     public List<UserProfile> getParticipantUsers(String participantId, OAuth2AuthorizedClient authorizedClient) {
+        Map<String, Object> pathParams = Map.of("participantId", participantId);
         Class<List<UserProfile>> reType = (Class<List<UserProfile>>)(Class<?>) List.class;
-        return doGet(baseUrl + "/participants/{participantId}/users", Map.of("participantId", participantId), reType, authorizedClient);
+        return doGet("/participants/{participantId}/users", pathParams, Map.of(), reType, authorizedClient);
     }
-    
+
     public List<Participant> getParticipants(int offset, int limit) {
-        Map<String, Object> params = buildPagingParams(offset, limit);
+        Map<String, Object> queryParams = buildPagingParams(offset, limit);
         Class<List<Participant>> reType = (Class<List<Participant>>)(Class<?>) List.class;
-        return doGet(baseUrl + "/participants?offset={offset}&limit={limit}", params, reType);
+        return doGet("/participants", Map.of(), queryParams, reType);
     }
 
     public Participants getParticipants(int offset, int limit, OAuth2AuthorizedClient authorizedClient) {
-        Map<String, Object> params = buildPagingParams(offset, limit);
-        return doGet(baseUrl + "/participants?offset={offset}&limit={limit}", params, Participants.class, authorizedClient);
+        Map<String, Object> queryParams = buildPagingParams(offset, limit);
+        return doGet("/participants", Map.of(), queryParams, Participants.class, authorizedClient);
     }
 
     public Participant addParticipant(String participantSD) {
-        return doPost(baseUrl + "/participants", participantSD, Map.of(), Participant.class);
+        return doPost("/participants", participantSD, Map.of(), Map.of(), Participant.class);
     }
-    
+
     public Participant addParticipant(String participantSD, OAuth2AuthorizedClient authorizedClient) {
-        return doPost(baseUrl + "/participants", participantSD, Map.of(), Participant.class, authorizedClient);
+        return doPost("/participants", participantSD, Map.of(), Map.of(), Participant.class, authorizedClient);
     }
-    
+
     public Participant deleteParticipant(String participantId) {
-        return doDelete(baseUrl + "/participants/{participantId}", Map.of("participantId", participantId), Participant.class);
+        Map<String, Object> pathParams = Map.of("participantId", participantId);
+        return doDelete("/participants/{participantId}", pathParams, Map.of(), Participant.class);
     }
-    
+
     public Participant deleteParticipant(String participantId, OAuth2AuthorizedClient authorizedClient) {
-        return doDelete(baseUrl + "/participants/{participantId}", Map.of("participantId", participantId), Participant.class, authorizedClient);
+        Map<String, Object> pathParams = Map.of("participantId", participantId);
+        return doDelete("/participants/{participantId}", pathParams, Map.of(), Participant.class, authorizedClient);
     }
-    
+
     public Participant updateParticipant(String participantId, String participantSD) {
-        return doPut(baseUrl + "/participants/{participantId}", participantSD, Map.of("participantId", participantId), Participant.class);
-    }    
+        Map<String, Object> pathParams = Map.of("participantId", participantId);
+        return doPut("/participants/{participantId}", participantSD, pathParams, Map.of(), Participant.class);
+    }
 
     public Participant updateParticipant(String participantId, String participantSD, OAuth2AuthorizedClient authorizedClient) {
-        return doPut(baseUrl + "/participants/{participantId}", participantSD, Map.of("participantId", participantId), Participant.class, authorizedClient);
-    }    
-    
+        Map<String, Object> pathParams = Map.of("participantId", participantId);
+        return doPut("/participants/{participantId}", participantSD, pathParams, Map.of(), Participant.class, authorizedClient);
+    }
 }

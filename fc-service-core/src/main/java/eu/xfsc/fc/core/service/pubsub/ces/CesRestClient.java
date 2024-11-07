@@ -31,16 +31,14 @@ public class CesRestClient extends ServiceClient {
 
 	public List<Map<String, Object>> getCredentials(String lastId, int page, int size, String type) {
 		log.debug("getCredentials.enter; got page: {}, size: {}, lastId: {}, type: {}", page, size, lastId, type);
-		Map<String, Object> params = new HashMap<>();
-		params.put("page", page);
-		params.put("size", size);
-		if (lastId != null) {
-			params.put("lastReceivedID", lastId);
-		}
-//		if (type != null) {
-//			params.put("type", type);
-//		}
-		String str = this.doGet("/credentials-events", params, String.class);
+        Map<String, Object> queryParams = new HashMap<>();
+        queryParams.put("page", page);
+        queryParams.put("size", size);
+        if (lastId != null) {
+            queryParams.put("lastReceivedID", lastId);
+        }
+
+		String str = this.doGet("/credentials-events", Map.of(), queryParams, String.class);
 		List<Map<String, Object>> result = null;
 		if (str != null) {
 			try {
@@ -56,8 +54,9 @@ public class CesRestClient extends ServiceClient {
     
 	public Map<String, Object> getCredentialsById(String id) { 
 		log.debug("getCredentialsById.enter; got id: {}", id);
-		String str = this.doGet("/credentials-events/" + id, Map.of(), String.class);
-		Map<String, Object> result = null;
+        Map<String, Object> pathParams = Map.of("id", id);
+        String str = this.doGet("/credentials-events/{id}", pathParams, Map.of(), String.class);
+        Map<String, Object> result = null;
 		if (str != null) {
 			try {
 				result = jsonMapper.readValue(str, mapTypeRef);

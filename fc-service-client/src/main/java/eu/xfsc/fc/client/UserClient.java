@@ -18,34 +18,38 @@ public class UserClient extends ServiceClient {
     public UserClient(String baseUrl, WebClient client) {
         super(baseUrl, client);
     }
-    
+
     public UserProfile getUser(String userId) {
-        return doGet(baseUrl + "/users/{userId}", Map.of("userId", userId), UserProfile.class);
+        Map<String, Object> pathParams = Map.of("userId", userId);
+        return doGet("/users/{userId}", pathParams, Map.of(), UserProfile.class);
     }
-    
+
     public UserProfiles getUsers(int offset, int limit) {
-        Map<String, Object> params = buildPagingParams(offset, limit);
-        return doGet(baseUrl + "/users?offset={offset}&limit={limit}", params, UserProfiles.class);
+        Map<String, Object> queryParams = buildPagingParams(offset, limit);
+        return doGet("/users", Map.of(), queryParams, UserProfiles.class);
     }
 
     public List<String> getUserRoles(String userId) {
-        return doGet(baseUrl + "/users/{userId}/roles", Map.of("userId", userId), List.class);
+        Map<String, Object> pathParams = Map.of("userId", userId);
+        return doGet("/users/{userId}/roles", pathParams, Map.of(), List.class);
     }
-    
+
     public UserProfile addUser(User user) {
-        return doPost(baseUrl + "/users", user, Map.of(), UserProfile.class);
+        return doPost("/users", user, Map.of(), Map.of(), UserProfile.class);
     }
-    
+
     public UserProfile deleteUser(String userId) {
-        return doDelete(baseUrl + "/users/{userId}", Map.of("userId", userId), UserProfile.class);
+        Map<String, Object> pathParams = Map.of("userId", userId);
+        return doDelete("/users/{userId}", pathParams, Map.of(), UserProfile.class);
     }
 
     public UserProfile updateUser(String userId, User user) {
-        return doPut(baseUrl + "/users/{userId}", user, Map.of("userId", userId), UserProfile.class);
+        Map<String, Object> pathParams = Map.of("userId", userId);
+        return doPut("/users/{userId}", user, pathParams, Map.of(), UserProfile.class);
     }
-    
+
     public List<String> updateUserRoles(String userId, List<String> roles) {
-        return doPut(baseUrl + "/users/{userId}/roles", roles, Map.of("userId", userId), List.class);
+        Map<String, Object> pathParams = Map.of("userId", userId);
+        return doPut("/users/{userId}/roles", roles, pathParams, Map.of(), List.class);
     }
-    
 }
