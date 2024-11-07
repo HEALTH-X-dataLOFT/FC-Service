@@ -41,3 +41,11 @@ java.lang.IllegalArgumentException: Type class java.net.URI is not supported.
     ....
 ```
 to prevent the issue please add the `https://w3id.org/security/suites/jws-2020/v1` URI as string preliminary to your SD in VP/VC context
+
+## Known Issues : Signatures 442 Error
+**Tirgger of the error:** Pushing a signed SD to a deployed version of federated Catalogue using the `POST/self-descriptions` API 
+**Raised Error: ** 442 error caused by the verification error `Signatures error; … does not match with proof.` 
+**Error handling: ** 
+1. The generated private key is not automatically used and should be copied to the [resources](https://gitlab.eclipse.org/eclipse/xfsc/cat/fc-service/-/tree/main/fc-tools/signer/src/main/resources?ref_type=heads) directory
+
+2. Secondly, the public key for the generated private key needs to be inserted into the FC Service that you deployed and to which you are trying to push the signed SD
