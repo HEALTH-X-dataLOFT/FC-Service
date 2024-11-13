@@ -90,8 +90,7 @@ public class SecurityConfig {
           .requestMatchers(antMatcher(HttpMethod.GET, "/participants")).permitAll()
           .requestMatchers(antMatcher(HttpMethod.PUT, "/participants/*")).hasAnyRole(CATALOGUE_ADMIN_ROLE, PARTICIPANT_ADMIN_ROLE)
           .requestMatchers(antMatcher(HttpMethod.DELETE, "/participants/*")).hasAnyRole(CATALOGUE_ADMIN_ROLE, PARTICIPANT_ADMIN_ROLE)
-          .requestMatchers(antMatcher(HttpMethod.GET, "/participants/*"))
-            	.hasAnyRole(CATALOGUE_ADMIN_ROLE, PARTICIPANT_ADMIN_ROLE, PARTICIPANT_USER_ADMIN_ROLE, SD_ADMIN_ROLE)
+          .requestMatchers(antMatcher(HttpMethod.GET, "/participants/*")).permitAll()
           .requestMatchers(antMatcher(HttpMethod.GET, "/participants/*/users"))
             	.hasAnyRole(CATALOGUE_ADMIN_ROLE, PARTICIPANT_ADMIN_ROLE, PARTICIPANT_USER_ADMIN_ROLE)
 

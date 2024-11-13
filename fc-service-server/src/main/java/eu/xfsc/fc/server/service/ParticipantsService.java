@@ -115,7 +115,7 @@ public class ParticipantsService implements ParticipantsApiDelegate {
   @Override
   public ResponseEntity<Participant> getParticipant(String participantId) {
     log.debug("getParticipant.enter; got participant: {}", participantId);
-    checkParticipantAccess(participantId);
+    // checkParticipantAccess(participantId);
     ParticipantMetaData part = partDao.select(participantId)
         .orElseThrow(() -> new NotFoundException("Participant not found: " + participantId));
     SelfDescriptionMetadata selfDescriptionMetadata = sdStorePublisher.getByHash(part.getSdHash());
