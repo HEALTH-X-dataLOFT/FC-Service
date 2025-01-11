@@ -13,6 +13,7 @@ import eu.xfsc.fc.core.pojo.ParticipantMetaData;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import jakarta.ws.rs.core.Response;
@@ -172,7 +173,14 @@ public class ParticipantDaoImpl implements ParticipantDao {
     List<GroupRepresentation> groups = instance.groups(null, offset, limit, false);
     Map<String, Long> counts = instance.count();
     long total = counts.get("count");
-    return new PaginatedResults<>(total, groups.stream().map(this::toParticipantExt).collect(Collectors.toList()));
+    // map groups to ParticipantMetaData, filter out null values
+    List<ParticipantMetaData> parts = groups.stream()
+      .map(this::toParticipantExt)
+      .filter(Objects::nonNull)
+      .collect(Collectors.toList());
+    // adjust totals. not strictly true, but better..
+    total -= groups.size() - parts.size();
+    return new PaginatedResults<>(total, parts);
   }
 
   /**
@@ -195,17 +203,20 @@ public class ParticipantDaoImpl implements ParticipantDao {
    * Map group representation to participant model.
    *
    * @param groupRepo Group representation model.
-   * @return Participant model.
+   * @return ParticipantMetaData model.
    */
-  private Participant toParticipant(GroupRepresentation groupRepo) {
-    Map<String, List<String>> attributes = groupRepo.getAttributes();
-    return new Participant(groupRepo.getName(), attributes.get(ATR_NAME).get(0),
-        attributes.get(ATR_PUBLIC_KEY).get(0), attributes.get(ATR_SD_HASH).get(0));
-  }
-
   private ParticipantMetaData toParticipantExt(GroupRepresentation groupRepo) {
     Map<String, List<String>> attributes = groupRepo.getAttributes();
+    // check for required attributes..
+    if (emptyAttributes(attributes.get(ATR_NAME)) || emptyAttributes(attributes.get(ATR_PUBLIC_KEY)) ||
+        emptyAttributes(attributes.get(ATR_SD_HASH))) {
+      return null; 
+    }
     return new ParticipantMetaData(groupRepo.getName(), attributes.get(ATR_NAME).get(0),
         attributes.get(ATR_PUBLIC_KEY).get(0), null, attributes.get(ATR_SD_HASH).get(0));
+  }
+
+  private boolean emptyAttributes(List<String> attrs) {
+    return attrs == null || attrs.isEmpty();
   }
 }

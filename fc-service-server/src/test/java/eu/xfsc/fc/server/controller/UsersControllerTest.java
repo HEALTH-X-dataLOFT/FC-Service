@@ -102,6 +102,10 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.c4_soft.springaddons.security.oauth2.test.annotations.Claims;
+import com.c4_soft.springaddons.security.oauth2.test.annotations.OpenIdClaims;
+import com.c4_soft.springaddons.security.oauth2.test.annotations.StringClaim;
+import com.c4_soft.springaddons.security.oauth2.test.annotations.WithMockJwtAuth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.WireMock;
 
@@ -197,7 +201,6 @@ public class UsersControllerTest {
         assertThatResponseUserHasValidData(user, profile);
     }
 
-
     @Test
     @WithMockUser(authorities = SD_ADMIN_ROLE_WITH_PREFIX)
     public void addUserShouldReturnForbiddenResponse() throws Exception {
@@ -205,6 +208,22 @@ public class UsersControllerTest {
             .perform(MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(new User()))
+                .with(csrf()))
+            .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockJwtAuth(authorities = {PARTICIPANT_USER_ADMIN_ROLE_WITH_PREFIX}, claims = @OpenIdClaims(otherClaims = @Claims(stringClaims = {
+        @StringClaim(name = "participant_id", value = DEFAULT_PARTICIPANT_ID)})))
+    public void addAdminUserShouldReturnForbiddenResponse() throws Exception {
+        User user = getTestUser("adminName", "adminSurname");
+        user.roleIds(List.of(CATALOGUE_ADMIN_ROLE));
+        String userId = UUID.randomUUID().toString();
+        setupKeycloak(SC_CREATED, user, userId);
+        mockMvc
+            .perform(MockMvcRequestBuilders.post("/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(user))
                 .with(csrf()))
             .andExpect(status().isForbidden());
     }

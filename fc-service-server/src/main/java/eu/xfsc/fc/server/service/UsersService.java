@@ -64,6 +64,7 @@ public class UsersService implements UsersApiDelegate {
       throw new ClientException("User cannot be empty or have empty field values, except for the role!");
     }
     checkParticipantAccess(user.getParticipantId());
+    checkRoleAssignmentAccess(user.getRoleIds(), null);
     UserProfile profile = userDao.create(user);
     log.debug("addUser.exit; returning: {}", profile);
     return ResponseEntity.created(URI.create("/users/" + profile.getId())).body(profile);
@@ -73,7 +74,7 @@ public class UsersService implements UsersApiDelegate {
    * Service method for update the user profile.
    *
    * @param userId user id of the user(required)
-   * @param user   User entity to be added {@link User}
+   * @param user   User entity to be updated {@link User}
    * @return Updated user profile (status code 200)
    *        or May contain hints how to solve the error or indicate what was wrong in the request. (status code 400)
    *        or Forbidden. The user does not have the permission to execute this request. (status code 403)
@@ -268,7 +269,7 @@ public class UsersService implements UsersApiDelegate {
                 PARTICIPANT_USER_ADMIN_ROLE_WITH_PREFIX)::contains))
             || !(sessionUserRoles.stream()
             .anyMatch(List.of(CATALOGUE_ADMIN_ROLE_WITH_PREFIX, PARTICIPANT_ADMIN_ROLE_WITH_PREFIX)::contains))
-            && (sessionUserRoles.contains(PARTICIPANT_USER_ADMIN_ROLE_WITH_PREFIX) && userId.equals(getSessionUserId()))
+            && (sessionUserRoles.contains(PARTICIPANT_USER_ADMIN_ROLE_WITH_PREFIX) && (userId == null || userId.equals(getSessionUserId())))
         ) {
           log.debug("doCheckRoleAssignmentRule.fails for assigning role :{};",SD_ADMIN_ROLE );
           throwAccessDeniedException(SD_ADMIN_ROLE);
