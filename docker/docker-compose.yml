@@ -67,7 +67,7 @@ services:
       KEYCLOAK_ADMIN: "${KEYCLOAK_ADMIN}"
       KEYCLOAK_ADMIN_PASSWORD: "${KEYCLOAK_ADMIN_PASSWORD}"
       PROXY_ADDRESS_FORWARDING: "true"
-    image: quay.io/keycloak/keycloak:23.0.7
+    image: quay.io/keycloak/keycloak:26.0
     ports:
       - "8080:8080"
     networks:
@@ -77,7 +77,7 @@ services:
       - "../keycloak/providers:/opt/keycloak/providers"
       - "../keycloak/realms:/opt/keycloak/data/import"
     command: >
-      start --db postgres --hostname-strict-https false --hostname-strict false --proxy edge --http-enabled true --import-realm 
+      start --db postgres --hostname-strict false --http-enabled true --import-realm 
       --log-level=DEBUG,io.quarkus:INFO,liquibase:INFO,org.hibernate:INFO,org.infinispan:INFO,org.keycloak.services.scheduled:INFO,org.keycloak.transaction:INFO,io.netty.buffer.PoolThreadCache:INFO,org.keycloak.models.sessions.infinispan:INFO
     depends_on:
       postgres:
