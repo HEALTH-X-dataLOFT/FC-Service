@@ -19,7 +19,7 @@ gemnasium-maven-dependency_scanning:
   
 maven:test:
   script:
-    - mvn $MAVEN_CLI_OPTS verify
+    - mvn $MAVEN_CLI_OPTS verify -X
     - cat fc-service-*/target/site/jacoco/index.html | grep -o '<tfoot>.*</tfoot>'
   artifacts:
     paths:
