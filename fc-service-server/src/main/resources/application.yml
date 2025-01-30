@@ -7,7 +7,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*" #health, info, metrics, prometheus, graph-rebuild
+        include: health, info
 
 server:
   port: 8081
