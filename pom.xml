@@ -56,7 +56,7 @@
 
     <properties>
         <!-- Important: The property 'revision' must be updated to describe version changes in a single place for the build process -->
-        <revision>2.0.0-SNAPSHOT</revision>
+        <revision>2.1.0-SNAPSHOT</revision>
         <tag.version>latest</tag.version>
         <!-- java -->
         <java.version>21</java.version>
