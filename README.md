@@ -1,5 +1,7 @@
 # Federated Catalogue
 
+> [!NOTE]
+> This is just a slight modification of the [Eclipse FC Service](https://gitlab.eclipse.org/eclipse/xfsc/cat/fc-service) for the HealthX Dataspace.
 
 ## Description
 The Gaia-X Catalogue Service makes Self-Descriptions of Providers and their Service Offerings available to Consumers.
